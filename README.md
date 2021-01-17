@@ -14,12 +14,12 @@ Quickly drop in effects with parameters and control completely over Wi-Fi! Set a
 
 ### Hardware
 
-<a href="https://www.mouser.com/ProductDetail/Espressif-Systems/ESP32-DevKitC-32UE/?qs=GedFDFLaBXFguOYDKoZ3jA%3D%3D">ESP32</a>
-<a href="https://www.amazon.com/BTF-LIGHTING-Flexible-Individually-Addressable-Non-waterproof/dp/B01CDTEJBG">LEDs</a>
+* <a href="https://www.mouser.com/ProductDetail/Espressif-Systems/ESP32-DevKitC-32UE/?qs=GedFDFLaBXFguOYDKoZ3jA%3D%3D">ESP32</a>
+* <a href="https://www.amazon.com/BTF-LIGHTING-Flexible-Individually-Addressable-Non-waterproof/dp/B01CDTEJBG">LEDs</a>
 
 ### Prereqs
 
-<a href="https://github.com/platformio/platformio-core">Install PlatformIO</a>
+<a href="https://github.com/platformio/platformio-core">PlatformIO</a>
 
 ### Installation
 

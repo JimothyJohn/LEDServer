@@ -14,6 +14,7 @@
 #include <WiFiManager.h> // Use WifiManager for login and maintenance
 #include <ArduinoOTA.h> // Enable OTA updates
 #include <ESPmDNS.h> // Connect by hostname
+#include <WebStrings.h> // HTML Data
 
 // Light configuration
 #define LED_PIN     12

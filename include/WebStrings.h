@@ -1,5 +1,4 @@
 #include "Arduino.h"
-// #include "effects.h"
 
 // String declarations
 String cssString() {
@@ -245,11 +244,13 @@ String footerString() {
   )=====";
 }
 
-String bodyStyle[] = {"<body>",
-                      "<body style=\"background: linear-gradient(160deg, #4f55dd, #191b81, #c7d8fe) no-repeat center center fixed;\">",
-                      "<body style=\"background: linear-gradient(150deg, red, white, orange, black) no-repeat center center fixed;\">",
-                      "<body style=\"background: linear-gradient(140deg, #468c55, white, green, black) no-repeat center center fixed;\">",
-                      "<body style=\"background: linear-gradient(150deg, red, orange, yellow, green, blue, indigo, violet) no-repeat center center fixed;\">",};
+String bodyStyle[] = {
+"<body>",
+"<body style=\"background: linear-gradient(160deg, #4f55dd, #191b81, #c7d8fe) no-repeat center center fixed;\">",
+"<body style=\"background: linear-gradient(150deg, red, white, orange, black) no-repeat center center fixed;\">",
+"<body style=\"background: linear-gradient(140deg, #468c55, white, green, black) no-repeat center center fixed;\">",
+"<body style=\"background: linear-gradient(150deg, red, orange, yellow, green, blue, indigo, violet) no-repeat center center fixed;\">"
+};
 
 String navHTML(uint8_t effect) {
   String ptr = headerString();
