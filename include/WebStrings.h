@@ -1,5 +1,5 @@
 #include "Arduino.h"
-#include "effects.h"
+// #include "effects.h"
 
 // String declarations
 String cssString() {
@@ -72,36 +72,49 @@ String cssString() {
 }
 
 String headerString() {
-  String ptr = R"=====(
+  return R"=====(
 <!DOCTYPE html>
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 <title>LED Control</title>
+</head>
 )=====";
-  ptr += cssString();
-  ptr += "</head>";
-  return ptr;
 }
 
 String effectSelect() {
   return R"=====(
-<form action="/effect" method="get">
-  <select name="effect" id="effect" onchange='if(this.value != 0) { this.form.submit(); }'>
-    <option value=0>Choose effect...</option>
-    <option value=1>off</option>
-    <option value=2>Plasma</option>
-    <option value=3>Lightning</option>
-    <option value=4>Pacifica</option>
-    <option value=5>Neon Racers</option>
-    <option value=6>RGB Bouncers</option>
-    <option value=7>BPM</option>
-    <option value=8>Confetti</option>
-    <option value=9>Sawtooth</option>
-    <option value=10>Countdown</option>
-    <option value=11>Rainbow Chase</option>
-  </select>
-</form><br>
+<div style="padding: 30px" class="container-fluid">
+    <div class="row">
+        <div class="col text-center">
+            <h1>LED Control</h1>
+        </div>
+    </div>
+</div>
+
+<div style="padding: 30px" class="container-fluid">
+    <div class="row">
+        <div class="col text-center">
+        <form action="/effect" method="get">
+          <select name="effect" id="effect" onchange='if(this.value != 0) { this.form.submit(); }'>
+            <option value=0>Choose effect...</option>
+            <option value=1>off</option>
+            <option value=2>Plasma</option>
+            <option value=3>Lightning</option>
+            <option value=4>Pacifica</option>
+            <option value=5>Neon Racers</option>
+            <option value=6>RGB Bouncers</option>
+            <option value=7>BPM</option>
+            <option value=8>Confetti</option>
+            <option value=9>Sawtooth</option>
+            <option value=10>Countdown</option>
+            <option value=11>Rainbow Chase</option>
+          </select>
+        </form>
+      </div>
+    </div>
+</div>
 )=====";
 }
 
