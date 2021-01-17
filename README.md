@@ -33,13 +33,16 @@ Update src/main.cpp LED parameters
 
 ```cpp
 // Line 19
+// Change to your ESP pin number
 #define LED_PIN     12
 // Line 25
+// 60LEDs/m = 300 x strands
 const uint16_t strandLength = 300;
+// Rows/cols in serpentine grid
 const uint8_t strandNumber = 1;
 ```
 
-Update your platform.ini configuration file
+Update platform.ini configuration
 
 ```ini 
 upload_port = /dev/ttyUSB0 # CHANGE THIS IF NEEDED

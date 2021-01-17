@@ -128,8 +128,8 @@ void plasma(uint8_t palette, uint16_t led_start, uint16_t led_end) {            
 // Lightning Strike Effect
 void lightning() {
   uint16_t dimmer = 1;
-  uint16_t ledstart = random8(NUM_LEDS);                               // Determine starting location of flash
-  uint16_t ledlen = random8(NUM_LEDS-ledstart);                        // Determine length of flash (not to go beyond NUM_LEDS-1)
+  uint16_t ledstart = random8(strandLength);                               // Determine starting location of flash
+  uint16_t ledlen = random8(strandLength-ledstart);                        // Determine length of flash (not to go beyond NUM_LEDS-1)
   
   for (int flashCounter = 0; flashCounter < random8(3,8); flashCounter++) {
     if(flashCounter == 0) dimmer = 5;                         // the brightness of the leader is scaled down by a factor of 5
