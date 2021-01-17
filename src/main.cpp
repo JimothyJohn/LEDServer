@@ -27,7 +27,8 @@ const uint8_t strandNumber = 5;
 #define NUM_LEDS (strandLength * strandNumber)
 CRGB leds[NUM_LEDS];
 
-uint16_t XY (uint16_t x, uint16_t y) {
+// Matrix table conversion
+uint16_t XY(uint16_t x, uint16_t y) {
   // any out of bounds address maps to the first hidden pixel
   if ( (x >= strandLength) || (y >= strandNumber) ) {
     return (NUM_LEDS);
@@ -46,8 +47,6 @@ uint16_t XY (uint16_t x, uint16_t y) {
   uint16_t j = XYTable[i];
   return j;
 }
-
-uint8_t gHue = 0; // rotating "base color" used by many of the patterns
 
 AsyncWebServer server(80);
 
