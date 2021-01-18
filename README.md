@@ -1,10 +1,10 @@
 # FastLED Server
 
-LEDServer makes controlling LED's remotely easy.
+LEDServer makes controlling FastLED's remotely easy.
 
 Quickly drop in effects with parameters and control completely over Wi-Fi! Set and forget.
 
-* PlatformIO-based for instant deployment on ESP32. Total project cost <$30
+* PlatformIO-based for instant deployment on ESP32. Total project cost <$50
 * OTA for remote updates and scalability
 * Wi-Fi login server for automatic configuration and security
 * Hostname connection for ease-of-access
@@ -53,11 +53,17 @@ monitor_speed = 115200
 # upload_port = ledcontrol.local
 ```
 
-Upload via USB and use access point LEDSetup to connect the ESP32 to your Wi-Fi.
+Move to root of repository and upload
 
-Finalize your platform.ini configuration
+```sh 
+cd <LEDServer>
+pio run -t upload
+```
 
-```ini 
+Use access point LEDSetup to connect the ESP32 to your Wi-Fi then finalize your platform.ini configuration
+
+```ini
+# Leave as comments in case you need to troubleshoot
 # upload_port = /dev/ttyUSB0
 # monitor_port = /dev/ttyUSB0
 monitor_speed = 115200

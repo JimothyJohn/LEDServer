@@ -16,13 +16,9 @@
 #define PLASMA_INDEX 1
 #define LIGHTNING_INDEX 2
 #define PACIFICA_INDEX 3
-#define NEON_RACER_INDEX 4
-#define BOUNCER_INDEX 5
-#define BPM_INDEX 6
-#define CONFETTI_INDEX 7
-#define SAWTOOTH_INDEX 8
-#define COUNTDOWN_INDEX 9
-#define CHASE_INDEX 10
+#define BPM_INDEX 4
+#define CONFETTI_INDEX 5
+#define SAWTOOTH_INDEX 6
 
 // Pallette options
 CRGBPalette16 PALETTE_SELECT[] = {OceanColors_p,

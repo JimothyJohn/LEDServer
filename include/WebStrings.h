@@ -1,6 +1,6 @@
 #include "Arduino.h"
 
-// Add Bootstrap fluid container to 
+// Add Bootstrap fluid container 
 String containerify(String body) {
   String ptr = R"=====(
 <div style="padding: 30px" class="container-fluid">

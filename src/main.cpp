@@ -3,18 +3,18 @@
 // LED library and effect strings
 #include <FastLED.h>
 #include <effects.h>
+#include <WebStrings.h> // HTML Data
 
 // Load async web library
 #ifdef ESP32
+  #include <WiFiManager.h> // Use WifiManager for login and maintenance
   #include <AsyncTCP.h>
 #else
   #include <ESPAsyncTCP.h>
 #endif
 #include <ESPAsyncWebServer.h>
-#include <WiFiManager.h> // Use WifiManager for login and maintenance
 #include <ArduinoOTA.h> // Enable OTA updates
 #include <ESPmDNS.h> // Connect by hostname
-#include <WebStrings.h> // HTML Data
 
 // Light configuration
 #define LED_PIN     12
@@ -409,7 +409,7 @@ void SetupWiFi() {
 
 // Setup sequence
 void setup() {
-  delay(1000); // pwrLevel-up safety delay
+  delay(5000); // pwrLevel-up safety delay
   
   // Start serial server and connect to WiFi
   Serial.begin(115200);
