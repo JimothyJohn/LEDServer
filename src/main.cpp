@@ -2,7 +2,6 @@
 #include <Arduino.h>
 // LED library and effect strings
 #include <FastLED.h>
-#include <effects.h>
 #include <WebStrings.h> // HTML Data
 
 // Load async web library
@@ -358,8 +357,6 @@ void SetupServer() {
 // Enable OTA updates
 // https://github.com/espressif/arduino-esp32/blob/master/libraries/ArduinoOTA/examples/BasicOTA/BasicOTA.ino
 void SetupOTA() {
-  ArduinoOTA.setHostname("myesp32");
-
   ArduinoOTA
     .onStart([]() {
       String type;
@@ -392,7 +389,7 @@ void SetupOTA() {
 // Initialize Wi-Fi manager and connect to Wi-Fi
 // https://github.com/tzapu/WiFiManager/blob/master/examples/Basic/Basic.ino
 void SetupWiFi() {
-  WiFi.mode(WIFI_STA); // it is a good practice to make sure your code sets wifi mode how you want it.
+  WiFi.mode(WIFI_STA); // make sure your code sets wifi mode
 
   WiFiManager wm;
 

@@ -1,5 +1,36 @@
 #include "Arduino.h"
 
+// Effect indexes
+#define ZERO_INDEX 0
+#define PLASMA_INDEX 1
+#define LIGHTNING_INDEX 2
+#define PACIFICA_INDEX 3
+#define BPM_INDEX 4
+#define CONFETTI_INDEX 5
+#define SAWTOOTH_INDEX 6
+
+// Pallette options
+CRGBPalette16 PALETTE_SELECT[] = {OceanColors_p,
+                                  LavaColors_p,
+                                  ForestColors_p,
+                                  RainbowColors_p,
+                                  PartyColors_p,
+                                  HeatColors_p};
+
+// Pacifica palettes
+CRGBPalette16 pacifica_palette_1 = {
+  0x000507, 0x000409, 0x00030B, 0x00030D, 0x000210, 0x000212, 0x000114, 0x000117, 
+  0x000019, 0x00001C, 0x000026, 0x000031, 0x00003B, 0x000046, 0x14554B, 0x28AA50 };
+CRGBPalette16 pacifica_palette_2 = {
+  0x000507, 0x000409, 0x00030B, 0x00030D, 0x000210, 0x000212, 0x000114, 0x000117, 
+  0x000019, 0x00001C, 0x000026, 0x000031, 0x00003B, 0x000046, 0x0C5F52, 0x19BE5F };
+CRGBPalette16 pacifica_palette_3 = {
+  0x000208, 0x00030E, 0x000514, 0x00061A, 0x000820, 0x000927, 0x000B2D, 0x000C33, 
+  0x000E39, 0x001040, 0x001450, 0x001860, 0x001C70, 0x002080, 0x1040BF, 0x2060FF };
+
+// Rotating "base color" used by many of the patterns
+uint8_t gHue = 0; 
+
 // Add Bootstrap fluid container 
 String containerify(String body) {
   String ptr = R"=====(
@@ -27,17 +58,13 @@ String headerString = {R"=====(
 <body>
 )====="};
 
-String effectString[] = {"<p>off</p>",
-                        "<p>PLASMA</p>",
-                        "<p>Lightning</p>",
-                        "<p>Pacifica</p>",
-                        "<p>Racers</p>",
-                        "<p>Bouncers</p>",
-                        "<p>BPM</p>",
-                        "<p>Confetti</p>",
-                        "<p>Sawtooth</p>",
-                        "<p>Countdown</p>",
-                        "<p>Rainbow Chase</p>"};
+String effectString[] = {"<h3>off</h3>",
+                        "<h3>PLASMA</h3>",
+                        "<h3>Lightning</h3>",
+                        "<h3>Pacifica</h3>",
+                        "<h3>BPM</h3>",
+                        "<h3>Confetti</h3>",
+                        "<h3>Sawtooth</h3>",};
 
 String effectSelect() {
   // Title
@@ -52,13 +79,9 @@ String effectSelect() {
     <option value=2>Plasma</option>
     <option value=3>Lightning</option>
     <option value=4>Pacifica</option>
-    <option value=5>Neon Racers</option>
-    <option value=6>RGB Bouncers</option>
     <option value=7>BPM</option>
     <option value=8>Confetti</option>
     <option value=9>Sawtooth</option>
-    <option value=10>Countdown</option>
-    <option value=11>Rainbow Chase</option>
   </select>
 </form>
 )====="};
@@ -66,7 +89,7 @@ String effectSelect() {
   return ptr;
 }
 
-String colorFormn = {R"=====(
+String colorForm = {R"=====(
 <form action="/color" method="get">
   <label for="red">Red</label><br>
   <input type="range" id="red" name="red" min="0" max="255"><br>
@@ -135,34 +158,32 @@ palletForm,
 "",
 // 3 - Pacifica
 "",
-// 4 - Racers
-moveForm+dirForm+racerForm,
-// 5 - Bouncers
-moveForm,
-// 6 - BPM
+// 4 - BPM
 tempoForm+palletForm,
 // 7 - Confetti
 "",
 // 8 - Sawtooth
-palletForm+tempoForm,
-// 9 - Countdown
-"",
-// 10 - Chase
-moveForm+dirForm};
+palletForm+tempoForm};
 
 String footerString = {R"=====(
   </body>
   </html>
-  <footer class="bottom">
-		<p style="font-size: 15px">Copyright © 2020 advin.io. All rights reserved.</p>
+  <footer class="fixed-bottom">
+        <div class="container-fluid">
+            <div class="row">
+              <div class="col text-center">
+                <p style="font-size: 15px">Copyright © 2020 advin.io. All rights reserved.</p>
+              </div>
+            </div>
+        </div>
   </footer>
   )====="};
 
 String navHTML(uint8_t effect) {
   String ptr = headerString;
-  ptr += effectString[effect];
   ptr += effectSelect();
-  ptr += effectParameters[effect];
+  ptr += containerify(effectString[effect]);
+  ptr += containerify(effectParameters[effect]);
   ptr += footerString;
   return ptr;
 }
