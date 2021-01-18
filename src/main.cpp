@@ -228,7 +228,6 @@ void pacifica_loop() {
 // End of Pacifica code
 
 // Shaking effect at tempo
-uint8_t tempo = 120;
 void bpm(uint8_t masterPalette, uint8_t BeatsPerMinute) {
   // colored stripes pulsing at a defined Beats-Per-Minute (BPM)
   CRGBPalette16 palette = PALETTE_SELECT[masterPalette];
