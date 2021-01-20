@@ -50,7 +50,7 @@ uint16_t XY(uint16_t x, uint16_t y) {
 
 AsyncWebServer server(80);
 
-// Changes a pixel on all strands
+// Changes an RGB pixel on all strands
 void setPixelRGB(uint16_t dot, uint8_t r, uint8_t g, uint8_t b) {
   // For every strand in the band
   for(uint8_t strand=0; strand<strandNumber; strand++) {
@@ -60,6 +60,17 @@ void setPixelRGB(uint16_t dot, uint8_t r, uint8_t g, uint8_t b) {
     leds[dot][0] = r;
     leds[dot][1] = g;
     leds[dot][2] = b;
+  }
+}
+
+// Changes an HSV pixel on all strands
+void setPixelHSV(uint16_t dot, uint8_t h, uint8_t s, uint8_t v) {
+  // For every strand in the band
+  for(uint8_t strand=0; strand<strandNumber; strand++) {
+    dot = dot % strandLength; // Account for overflow
+    dot = XY(dot,strand); // Apply to matrix transoform
+    // Assign value to LEDs
+    leds[dot] = CHSV(h,s,v);
   }
 }
 
@@ -75,10 +86,7 @@ void rgbZone(uint16_t led_start, uint16_t led_end, uint8_t r, uint8_t g, uint8_t
 void hsvZone(uint16_t led_start, uint16_t led_end, uint8_t h, uint8_t s, uint8_t v) {
   //Light each pixel in zone w/ overlap
   for(uint16_t dot=led_start; dot<led_end; dot++) {
-    dot = dot % strandLength; // Account for overflow
-    for(uint8_t strand=0; strand<strandNumber; strand++) {
-      leds[XY(dot,strand)] = CHSV(h,s,v);
-    }
+    setPixelHSV(dot,h,s,v);
   }
 }
 
@@ -259,6 +267,52 @@ void sawtooth(uint8_t masterPalette, uint8_t BeatsPerMinute) {
     leds[XY(cur_led,0)] = ColorFromPalette(palette, cur_led, 255, currentBlending); // I prefer to use palettes instead of CHSV or CRGB assignments.
 }
 
+uint16_t bandLoc = 0;
+void RainbowChase(uint8_t speed, int dir, uint8_t bands) {
+  uint16_t bandWidth = strandLength / bands; // Number of pixels in color
+  uint8_t wavelength = 255 / bands; // Wavelength (color in Hue) of band
+  uint8_t satvalOffset = 128; // Start at half Hue
+  uint16_t startled = bandLoc;
+  uint8_t satval = satvalOffset;
+  uint8_t satvalStep = (255-satvalOffset) / bandWidth;
+
+  // Shift effect
+  bandLoc += speed;
+  if (bandLoc>=strandLength) {bandLoc-=strandLength;}
+  
+  // Add Color
+  for(uint8_t band=0; band<bands; band++) {
+    startled = bandLoc+bandWidth*band;
+    for(uint16_t dot=0; dot<bandWidth; dot++) {
+      satval = dot*satvalStep+satvalOffset;
+      setPixelHSV(startled+dot, wavelength*band, satval, satval);
+    }
+  }
+}
+
+// Racer params
+uint16_t pinkLoc = 0;
+uint16_t blueLoc = 0;
+uint8_t pinkWidth = 20;
+uint8_t blueWidth = 40;
+void NeonRacers(uint8_t speed, int racedir, uint8_t racerNumber) {
+  // Shift effect
+  pinkLoc += speed*2;
+  blueLoc += speed;
+  if (pinkLoc>=strandLength) {pinkLoc-=strandLength;}  
+  if (blueLoc>=strandLength) {blueLoc-=strandLength;}  
+  
+  // Add Color
+  clearLEDs();
+  // Calculate space needed between racers to fill strip
+  uint16_t pinkSpace = (strandLength-racerNumber*pinkWidth)/racerNumber+pinkWidth;
+  uint16_t blueSpace = (strandLength-racerNumber*blueWidth)/racerNumber+blueWidth;
+  for(uint8_t racer=0; racer<racerNumber; racer++) {
+    rgbOverlay(pinkLoc+pinkSpace*racer, pinkLoc+pinkWidth+pinkSpace*racer, 250, 10, 20);
+    rgbOverlay(blueLoc+blueSpace*racer, blueLoc+blueWidth+blueSpace*racer, 20, 10, 250);
+  }
+}
+
 void notFound(AsyncWebServerRequest *request) {
   request->send(404, "text/plain", "Not found");
 }
@@ -272,6 +326,7 @@ uint8_t masterDir = 1;
 uint8_t numRacers = 1;
 // https://github.com/me-no-dev/ESPAsyncWebServer/blob/master/examples/simple_server/simple_server.ino
 void SetupServer() {
+  Serial.print('Configuring webserver...');
   // Index page, defaults to off
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
     request->send(200, "text/html", navHTML(activeEffect));
@@ -287,6 +342,8 @@ void SetupServer() {
         clearLEDs();
       }
     }
+    Serial.print("Running effect: ");
+    Serial.println(effectString[activeEffect]);
     request->send(200, "text/html", navHTML(activeEffect));
   });
   
@@ -295,7 +352,6 @@ void SetupServer() {
     String color;
     if (request->hasParam("color")) {
       color = request->getParam("color")->value();
-      //plasmaPalette = palette.toInt() - 1;
     }
     request->send(200, "text/html", navHTML(activeEffect));
   });
@@ -357,6 +413,7 @@ void SetupServer() {
 // Enable OTA updates
 // https://github.com/espressif/arduino-esp32/blob/master/libraries/ArduinoOTA/examples/BasicOTA/BasicOTA.ino
 void SetupOTA() {
+  Serial.print('Configuring OTA...');
   ArduinoOTA
     .onStart([]() {
       String type;
@@ -389,6 +446,7 @@ void SetupOTA() {
 // Initialize Wi-Fi manager and connect to Wi-Fi
 // https://github.com/tzapu/WiFiManager/blob/master/examples/Basic/Basic.ino
 void SetupWiFi() {
+  Serial.print('Configuring WiFi...');
   WiFi.mode(WIFI_STA); // make sure your code sets wifi mode
 
   WiFiManager wm;
@@ -411,6 +469,7 @@ void setup() {
   // Start serial server and connect to WiFi
   Serial.begin(115200);
   while (!Serial);
+  Serial.print('Serial alive!');
 
   // Uses soft AP to connect to Wi-Fi (if saved credentials aren't valid)
   SetupWiFi();
@@ -423,8 +482,10 @@ void setup() {
     Serial.println("Error starting mDNS!");
     ESP.restart();
   }
+  Serial.print('Serial alive!');
 
   //Configure LEDs
+  Serial.print('Configuring LEDs...');
   FastLED.addLeds<LED_TYPE, LED_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
   FastLED.setBrightness(BRIGHTNESS);
   clearLEDs();
@@ -433,33 +494,39 @@ void setup() {
 
 void handleEffect(uint8_t effect) {
   switch (effect) {
-      case ZERO_INDEX:
-        break;
-      case PLASMA_INDEX:
-        EVERY_N_MILLISECONDS(50) {plasma(masterPalette, 0, NUM_LEDS);}
-        break;
-      case LIGHTNING_INDEX:
-        lightning();
-        break;
-      case PACIFICA_INDEX:
-        EVERY_N_MILLISECONDS(20) {pacifica_loop();}
-        break;
-      case BPM_INDEX:
-        EVERY_N_MILLISECONDS(20) {gHue++;} 
-        bpm(masterPalette, masterTempo);
-        break;
-      case CONFETTI_INDEX:
-        EVERY_N_MILLISECONDS(20) {gHue++;}
-        confetti();
-        break;
-      case SAWTOOTH_INDEX:
-        sawtooth(masterPalette, masterTempo);
-        break;
-    }
+    case ZERO_INDEX:
+      break;
+    case PLASMA_INDEX:
+      EVERY_N_MILLISECONDS(40) {plasma(masterPalette, 0, NUM_LEDS);}
+      break;
+    case LIGHTNING_INDEX:
+      lightning();
+      break;
+    case PACIFICA_INDEX:
+      EVERY_N_MILLISECONDS(40) {pacifica_loop();}
+      break;
+    case BPM_INDEX:
+      EVERY_N_MILLISECONDS(40) {gHue++;} 
+      bpm(masterPalette, masterTempo);
+      break;
+    case CONFETTI_INDEX:
+      EVERY_N_MILLISECONDS(40) {gHue++;}
+      confetti();
+      break;
+    case SAWTOOTH_INDEX:
+      sawtooth(masterPalette, masterTempo);
+      break;
+    case CHASE_INDEX:
+      EVERY_N_MILLISECONDS(40) {RainbowChase(masterSpeed, 1, 8);}
+      break;
+    case RACER_INDEX:
+      EVERY_N_MILLISECONDS(40) {NeonRacers(masterSpeed, 1, numRacers);}
+      break;
+  }
+  FastLED.show();
 }
 
 void loop() {
   ArduinoOTA.handle();
   handleEffect(activeEffect);
-  FastLED.show();
 }

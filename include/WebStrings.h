@@ -8,6 +8,8 @@
 #define BPM_INDEX 4
 #define CONFETTI_INDEX 5
 #define SAWTOOTH_INDEX 6
+#define CHASE_INDEX 7
+#define RACER_INDEX 8
 
 // Pallette options
 CRGBPalette16 PALETTE_SELECT[] = {OceanColors_p,
@@ -31,7 +33,7 @@ CRGBPalette16 pacifica_palette_3 = {
 // Rotating "base color" used by many of the patterns
 uint8_t gHue = 0; 
 
-// Add Bootstrap fluid container 
+// Add Bootstrap fluid container wrapper
 String containerify(String body) {
   String ptr = R"=====(
 <div style="padding: 30px" class="container-fluid">
@@ -58,20 +60,23 @@ String headerString = {R"=====(
 <body>
 )====="};
 
-String effectString[] = {"<h3>off</h3>",
-                        "<h3>PLASMA</h3>",
-                        "<h3>Lightning</h3>",
-                        "<h3>Pacifica</h3>",
-                        "<h3>BPM</h3>",
-                        "<h3>Confetti</h3>",
-                        "<h3>Sawtooth</h3>",};
+String effectString[] = {"off",
+                        "Plasma",
+                        "Lightning",
+                        "Pacifica",
+                        "BPM",
+                        "Confetti",
+                        "Sawtooth",
+                        "Rainbow Chase",
+                        "Neon Racers"};
 
-String effectSelect() {
+String effectSelect(uint8_t effect) {
   // Title
   String ptrString = "<h1>LED Control</h1>";
   String ptr = containerify(ptrString);
+  ptr += containerify("<h3>"+effectString[effect]+"</h3>");
   // Selection box
-  ptrString = {R"=====(
+  ptrString = R"=====(
 <form action="/effect" method="get">
   <select name="effect" id="effect" onchange='if(this.value != 0) { this.form.submit(); }'>
     <option value=0>Choose effect...</option>
@@ -79,12 +84,14 @@ String effectSelect() {
     <option value=2>Plasma</option>
     <option value=3>Lightning</option>
     <option value=4>Pacifica</option>
-    <option value=7>BPM</option>
-    <option value=8>Confetti</option>
-    <option value=9>Sawtooth</option>
+    <option value=5>BPM</option>
+    <option value=6>Confetti</option>
+    <option value=7>Sawtooth</option>
+    <option value=8>Rainbow Chase</option>
+    <option value=9>Neon Racers</option>
   </select>
 </form>
-)====="};
+)=====";
   ptr += containerify(ptrString);
   return ptr;
 }
@@ -160,10 +167,15 @@ palletForm,
 "",
 // 4 - BPM
 tempoForm+palletForm,
-// 7 - Confetti
+// 5 - Confetti
 "",
-// 8 - Sawtooth
-palletForm+tempoForm};
+// 6 - Sawtooth
+palletForm+tempoForm,
+// 7 - Chase
+moveForm,
+// 8 - Racers
+moveForm+dirForm+racerForm
+};
 
 String footerString = {R"=====(
   </body>
@@ -181,8 +193,7 @@ String footerString = {R"=====(
 
 String navHTML(uint8_t effect) {
   String ptr = headerString;
-  ptr += effectSelect();
-  ptr += containerify(effectString[effect]);
+  ptr += effectSelect(effect);
   ptr += containerify(effectParameters[effect]);
   ptr += footerString;
   return ptr;

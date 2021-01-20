@@ -6,7 +6,7 @@ Start by cloning the repository into your desired directory:
 user@host:~$ git clone https://github.com/JimothyJohn/LEDServer.git
 ```
 
-Update src/main.cpp LED parameters
+Update [`src/main.cpp`](src/main.cpp) LED parameters
 
 ```cpp
 // Line 19
@@ -19,7 +19,7 @@ const uint16_t strandLength = 300;
 const uint8_t strandNumber = 1;
 ```
 
-Update platform.ini configuration
+Update [`platform.ini`](platform.ini) configuration
 
 ```ini 
 upload_port = /dev/ttyUSB0 # CHANGE THIS IF NEEDED
@@ -37,7 +37,7 @@ user@host:~$ cd <LEDServer>
 user@host:<LEDServer>$ pio run -t upload
 ```
 
-Use access point LEDSetup to connect the ESP32 to your Wi-Fi then finalize your platform.ini configuration
+Go to your phone/PC's Wi-Fi settings and use access point "LEDSetup" to connect the ESP32 to your Wi-Fi, then finalize your [`platform.ini`](platform.ini) configuration
 
 ```ini
 # Leave as comments in case you need to troubleshoot

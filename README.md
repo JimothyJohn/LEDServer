@@ -17,7 +17,7 @@ Quickly drop in effects with parameters and control completely over Wi-Fi! Set a
 
 ## Software Required
 
-<a href="https://github.com/platformio/platformio-core">PlatformIO</a>
+* <a href="https://github.com/platformio/platformio-core">PlatformIO</a>
 
 ## Installation
 
