@@ -119,7 +119,7 @@ String moveForm = {R"=====(
 )====="};
 String dirForm = {R"=====(
 <form action="/direction" method="get">
-  <input type="checkbox" id="direction" name="direction" checked onchange='if(this.value != 0) { this.form.submit(); }'>
+  <input type="checkbox" id="direction" name="direction" checked onchange='this.form.submit()}'>
   <label for="direction">Direction</label><br>
 </form>
 )====="};
@@ -145,6 +145,7 @@ String palletForm = {R"=====(
 </form>
 )====="};
 String racerForm = {R"=====(
+<h3>Racers</h3>
 <form action="/racers" method="get">
   <select name="racers" id="racers" onchange='if(this.value != 0) { this.form.submit(); }'>
     <option value=0>How many racers...</option>
@@ -152,6 +153,18 @@ String racerForm = {R"=====(
     <option value=2>2</option>
     <option value=3>3</option>
     <option value=4>4</option>
+  </select><br>
+</form>
+)====="};
+String bandForm = {R"=====(
+<h3>Colors</h3>
+<form action="/bands" method="get">
+  <select name="bands" id="bands" onchange='if(this.value != 0) { this.form.submit(); }'>
+    <option value=0>How many bands...</option>
+    <option value=4>4</option>
+    <option value=6>6</option>
+    <option value=8>8</option>
+    <option value=10>10</option>
   </select><br>
 </form>
 )====="};
@@ -172,9 +185,9 @@ tempoForm+palletForm,
 // 6 - Sawtooth
 palletForm+tempoForm,
 // 7 - Chase
-moveForm,
+moveForm+dirForm+bandForm,
 // 8 - Racers
-moveForm+dirForm+racerForm
+moveForm+racerForm
 };
 
 String footerString = {R"=====(
