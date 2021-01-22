@@ -23,7 +23,7 @@
 #define COLOR_ORDER GRB
 #define qsuba(x, b)  ((x>b)?x-b:0) // For Plasma Effect
 const uint16_t strandLength = 300;
-const uint8_t strandNumber = 5;
+const uint8_t strandNumber = 1;
 #define NUM_LEDS (strandLength * strandNumber)
 CRGB leds[NUM_LEDS];
 
@@ -268,6 +268,8 @@ void sawtooth(uint8_t masterPalette, uint8_t BeatsPerMinute) {
 }
 
 uint16_t bandLoc = 0;
+uint8_t numBands = 8;
+int8_t rbDir = 1;
 void RainbowChase(uint8_t speed, int dir, uint8_t bands) {
   uint16_t bandWidth = strandLength / bands; // Number of pixels in color
   uint8_t wavelength = 255 / bands; // Wavelength (color in Hue) of band
@@ -295,12 +297,23 @@ uint16_t pinkLoc = 0;
 uint16_t blueLoc = 0;
 uint8_t pinkWidth = 20;
 uint8_t blueWidth = 40;
-void NeonRacers(uint8_t speed, int racedir, uint8_t racerNumber) {
+int8_t pinkDir = 1;
+int8_t blueDir = 1;
+void NeonRacers(uint8_t speed, uint8_t racerNumber) {
   // Shift effect
-  pinkLoc += speed*2;
-  blueLoc += speed;
-  if (pinkLoc>=strandLength) {pinkLoc-=strandLength;}  
-  if (blueLoc>=strandLength) {blueLoc-=strandLength;}  
+  if (pinkLoc<=speed*2) {
+    pinkDir = 1;
+  } else if (pinkLoc>=strandLength-speed*2-pinkWidth) {
+    pinkDir = -1;
+    Serial.print(pinkDir);
+  }
+  if (blueLoc<=speed) {
+    blueDir = 1;
+  } else if (blueLoc>=strandLength-speed-blueWidth) {
+    blueDir = -1;
+  }
+  pinkLoc += speed*2*pinkDir;  
+  blueLoc += speed*blueDir;
   
   // Add Color
   clearLEDs();
@@ -318,11 +331,11 @@ void notFound(AsyncWebServerRequest *request) {
 }
 
 // Set up server callback functions
-uint8_t activeEffect = ZERO_INDEX;
+uint8_t activeEffect = CHASE_INDEX;
 uint8_t masterSpeed = 1;
 uint8_t masterTempo = 1;
 uint8_t masterPalette = 1;
-uint8_t masterDir = 1;
+int masterDir = 1;
 uint8_t numRacers = 1;
 // https://github.com/me-no-dev/ESPAsyncWebServer/blob/master/examples/simple_server/simple_server.ino
 void SetupServer() {
@@ -371,7 +384,9 @@ void SetupServer() {
     String direction;
     if (request->hasParam("direction")) {
       direction = request->getParam("direction")->value();
-      masterDir = direction.toInt();
+      Serial.print("Direction: ");
+      Serial.println(direction);
+      masterDir = direction.toInt()*2-1;
     }
     request->send(200, "text/html", navHTML(activeEffect));
   });
@@ -402,6 +417,16 @@ void SetupServer() {
     if (request->hasParam("racers")) {
       number = request->getParam("racers")->value();
       numRacers = number.toInt();
+    }
+    request->send(200, "text/html", navHTML(activeEffect));
+  });
+
+  // Custom - Number of rainbow bands
+  server.on("/bands", HTTP_GET, [](AsyncWebServerRequest *request){
+    String bands;
+    if (request->hasParam("bands")) {
+      bands = request->getParam("bands")->value();
+      numBands = bands.toInt();
     }
     request->send(200, "text/html", navHTML(activeEffect));
   });
@@ -517,10 +542,10 @@ void handleEffect(uint8_t effect) {
       sawtooth(masterPalette, masterTempo);
       break;
     case CHASE_INDEX:
-      EVERY_N_MILLISECONDS(40) {RainbowChase(masterSpeed, 1, 8);}
+      EVERY_N_MILLISECONDS(40) {RainbowChase(masterSpeed, masterDir, numBands);}
       break;
     case RACER_INDEX:
-      EVERY_N_MILLISECONDS(40) {NeonRacers(masterSpeed, 1, numRacers);}
+      EVERY_N_MILLISECONDS(40) {NeonRacers(masterSpeed, numRacers);}
       break;
   }
   FastLED.show();
