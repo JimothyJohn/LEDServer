@@ -1,7 +1,7 @@
 // Base framework
 #include <Arduino.h>
 // LED library and parameters
-#include "LEDeffects.h"
+#include "LEDEffects.h"
 #include <EffectParameters.h>
 
 // Use WifiManager for login and maintenance
