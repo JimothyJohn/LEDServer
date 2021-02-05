@@ -49,7 +49,7 @@ String containerify(String body) {
   return ptr;
 }
 
-String headerString() {
+String headerString() = {
   String ptr = R"=====(
 <!DOCTYPE html>
 <html>
@@ -59,8 +59,11 @@ String headerString() {
 <title>LED Control</title>
 </head>
 <body>
-)=====";
-}
+)====="
+  String ptrString = R"=====(
+
+)====="
+};
 
 String effectString[] = {"off",
                         "Plasma",

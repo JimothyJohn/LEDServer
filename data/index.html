@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" charset="UTF-8">
+<title>LED Control</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> 
+<script src="script.js"></script> 
+</head>
+
+<body>
+<div style="padding: 30px" class="container-fluid">
+  <div class="row">
+    <div class="col text-center">
+      <h1>%ACTIVE_EFFECT%</h1>
+      <form action="/effect" method="get">
+        <select name="effect" id="effect" onchange='if(this.value != 0) { this.form.submit(); }'>
+          <option value=0>Choose effect...</option>
+          <option value=1>off</option>
+          <option value=2>Plasma</option>
+          <option value=3>Lightning</option>
+          <option value=4>Pacifica</option>
+          <option value=5>BPM</option>
+          <option value=6>Confetti</option>
+          <option value=7>Sawtooth</option>
+          <option value=8>Rainbow Chase</option>
+          <option value=9>Neon Racers</option>
+        </select>
+      </form>
+      %PARAM_STRINGS%
+    </div>
+  </div>
+</div>
+</body>
+
+<footer class="fixed-bottom">
+<div class="container-fluid">
+    <div class="row">
+      <div class="col text-center">
+        <a href="http://advin.io/"><img src="https://drive.google.com/uc?id=19gtVzQTrjAqPSP7G1lUsRx8mjidmgyCA" width=150px></a>
+        <p style="font-size: 15px">Copyright © 2020 advin.io. All rights reserved.</p>
+      </div>
+    </div>
+</div>
+</footer>
+</html>

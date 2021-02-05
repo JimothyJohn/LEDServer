@@ -1,19 +1,15 @@
-# FastLED Server
+# uServer
 
-LEDServer makes controlling FastLED's remotely easy.
+Framework for rapid IoT development on ESP32. Build webpages fast and exchange data quickly!
 
-Quickly drop in effects with parameters and control completely over Wi-Fi! Set and forget.
-
-* PlatformIO-based for instant deployment on ESP32. Total project cost <$50
+* PlatformIO-based for instant deployment on ESP32
 * OTA for remote updates and scalability
 * Wi-Fi login server for automatic configuration and security
-* Hostname connection for ease-of-access
-* HTML5 AsyncWebServer, powered by Boostrap, for custom UI creation
+* Asynchcronous web server, powered by Boostrap, for custom UI creation
 
 ## Hardware Required
 
-* This project will only work on an <a href="https://www.mouser.com/ProductDetail/Espressif-Systems/ESP32-DevKitC-32UE/?qs=GedFDFLaBXFguOYDKoZ3jA%3D%3D">ESP32</a>.
-* LED's, I use <a href="https://www.amazon.com/BTF-LIGHTING-Flexible-Individually-Addressable-Non-waterproof/dp/B01CDTEJBG">these LEDs from Amazon</a>(no affiliation).
+* This project is only tested on an <a href="https://www.mouser.com/ProductDetail/Espressif-Systems/ESP32-DevKitC-32UE/?qs=GedFDFLaBXFguOYDKoZ3jA%3D%3D">ESP32</a>.
 
 ## Software Required
 
@@ -21,7 +17,7 @@ Quickly drop in effects with parameters and control completely over Wi-Fi! Set a
 
 ## Installation
 
-See [`Quickstart Guide`](QUICKSTART.md) to quickly get it up and running.
+See [`QUICKSTART`](QUICKSTART.md) to quickly get it up and running. See [`LAYOUT`](LAYOUT.md) to see how it works.
 
 ## Core Libraries
 
@@ -31,10 +27,13 @@ See [`Quickstart Guide`](QUICKSTART.md) to quickly get it up and running.
 * <a href="https://github.com/FastLED/FastLED">FastLED</a>
 * <a href="https://github.com/tzapu/WiFiManager/">WiFiManager</a>
 
-## Customization
+## To-do List
 
-See [`Configuration`](CONFIGURATION.md).
-
-## Explanation
-
-See [`the tutorial`](TUTORIAL.md).
+* Add security/authentication
+* Add project examples
+    * IoT - MQTT
+    * Home automation - Philips Hue
+    * Lighting effects - FastLED
+* Change Wi-Fi login from default
+* Minimize energy consumption
+* Port to other platforms
