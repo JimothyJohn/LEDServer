@@ -11,6 +11,7 @@
 extern uint8_t gHue;
 extern const uint16_t strandLength;
 extern const uint8_t strandNumber;
+extern const uint8_t UPDATE_RATE;
 // extern CRGB leds;
 extern CRGBPalette16 PALETTE_SELECT[];
 extern CRGBPalette16 pacifica_palette_1, pacifica_palette_2, pacifica_palette_3;
@@ -88,5 +89,9 @@ extern uint16_t redLoc, blueLoc, greenLoc;
 extern uint8_t redWidth, greenWidth, blueWidth;
 extern int8_t redDir, blueDir, greenDir;
 void RGBBouncers(uint8_t speed, uint8_t racerNumber);
+
+extern uint8_t warpSpeed;
+extern uint16_t warpLoc;
+void Countdown();
 
 #endif

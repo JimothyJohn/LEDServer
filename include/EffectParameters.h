@@ -11,6 +11,7 @@
 #define CHASE_INDEX 7
 #define RACER_INDEX 8
 #define BOUNCER_INDEX 9
+#define COUNTDOWN_INDEX 10
 
 String effectString[] = {"off",
                         "PLASMA",
@@ -21,7 +22,8 @@ String effectString[] = {"off",
                         "Sawtooth",
                         "Rainbow Chase",
                         "Neon Racers",
-                        "Bouncers"};
+                        "Bouncers",
+                        "Countdown"};
 
 String colorParameter = {R"=====(
 <form action="/color" method="get">

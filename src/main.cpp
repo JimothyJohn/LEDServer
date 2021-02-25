@@ -22,7 +22,7 @@ void notFound(AsyncWebServerRequest *request) {
   request->send(404, "text/plain", "Not found");
 }
 
-uint8_t activeEffect = 0;
+uint8_t activeEffect = 10;
 String processor(const String& var) {
   if(var == "ACTIVE_EFFECT") {return effectString[activeEffect];}
   if(var == "PARAM_STRINGS") {return effectParameters[activeEffect];}
@@ -60,6 +60,9 @@ void SetupServer() {
       if (effect!=0) {
         activeEffect = effect.toInt() - 1;
         clearLEDs();
+      }
+      if(activeEffect==10) {
+        warpSpeed = 5;
       }
     }
     Serial.print("Running effect: ");
@@ -224,40 +227,48 @@ void setup() {
   SetupLEDs();
 }
 
+// Run chosen effect
 void handleEffect(uint8_t effect) {
   switch (effect) {
     case ZERO_INDEX:
       break;
     case PLASMA_INDEX:
-      EVERY_N_MILLISECONDS(40) {plasma(masterPalette, 0, strandLength);}
+      EVERY_N_MILLISECONDS(UPDATE_RATE) {plasma(masterPalette, 0, strandNumber*strandLength);}
       break;
     case LIGHTNING_INDEX:
       lightning();
       break;
     case PACIFICA_INDEX:
-      EVERY_N_MILLISECONDS(40) {pacifica_loop(0, strandLength);}
+      EVERY_N_MILLISECONDS(UPDATE_RATE) {pacifica_loop(0, strandNumber*strandLength);}
       break;
     case BPM_INDEX:
-      EVERY_N_MILLISECONDS(40) {gHue++;} 
+      EVERY_N_MILLISECONDS(UPDATE_RATE) {gHue++;} 
       bpm(masterPalette, masterTempo);
       break;
     case CONFETTI_INDEX:
-      EVERY_N_MILLISECONDS(40) {gHue++;}
+      EVERY_N_MILLISECONDS(UPDATE_RATE) {gHue++;}
       confetti();
       break;
     case SAWTOOTH_INDEX:
       sawtooth(masterPalette, masterTempo);
       break;
     case CHASE_INDEX:
-      EVERY_N_MILLISECONDS(40) {RainbowChase(masterSpeed, masterDir, numBands);}
+      EVERY_N_MILLISECONDS(UPDATE_RATE) {RainbowChase(masterSpeed, masterDir, numBands);}
       break;
     case RACER_INDEX:
-      EVERY_N_MILLISECONDS(40) {NeonRacers(masterSpeed, numRacers);}
+      EVERY_N_MILLISECONDS(UPDATE_RATE) {NeonRacers(masterSpeed, numRacers);}
+      break;
+    case BOUNCER_INDEX:
+      EVERY_N_MILLISECONDS(UPDATE_RATE) {NeonRacers(masterSpeed, numRacers);}
+      break;
+    case COUNTDOWN_INDEX:
+      EVERY_N_MILLISECONDS(UPDATE_RATE) {Countdown();}
       break;
   }
   FastLED.show();
 }
 
+// Boilerplate loop
 void loop() {
   ArduinoOTA.handle();
   handleEffect(activeEffect);
