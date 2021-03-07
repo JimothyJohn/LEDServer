@@ -13,7 +13,7 @@
 #define qsuba(x, b)  ((x>b)?x-b:0) // For Plasma Effect
 const uint16_t strandLength = 300;
 const uint8_t strandNumber = 8;
-const uint8_t UPDATE_RATE = 30;
+const uint8_t UPDATE_RATE = 15;
 
 CRGB leds[(strandLength * strandNumber)];
 
@@ -291,10 +291,9 @@ void sawtooth(uint8_t masterPalette, uint8_t BeatsPerMinute) {
 }
 
 // Rainbow chase effect
-uint16_t bandLoc = 0;
+int16_t bandLoc = 0;
 uint8_t numBands = 8;
-int8_t rbDir = 1;
-void RainbowChase(uint8_t speed, int dir, uint8_t bands) {
+void RainbowChase(uint8_t speed, int8_t dir, uint8_t bands) {
   uint16_t bandWidth = strandLength / bands; // Number of pixels in color
   uint8_t wavelength = 255 / bands; // Wavelength (color in Hue) of band
   uint8_t satvalOffset = 128; // Start at half Hue
@@ -303,10 +302,12 @@ void RainbowChase(uint8_t speed, int dir, uint8_t bands) {
   uint8_t satvalStep = (255-satvalOffset) / bandWidth;
 
   // Shift effect
-  bandLoc += speed;
+  bandLoc += speed * dir;
   // Reset location if at end
-  if (bandLoc>=strandLength-speed) {
-    bandLoc = strandLength % bandLoc;
+  if (bandLoc>=strandLength) {
+    bandLoc -= strandLength;
+  } else if (bandLoc<0) {
+    bandLoc += strandLength;
   }
   
   // Add Color
@@ -324,16 +325,21 @@ uint16_t pinkLoc = 0;
 uint16_t tealLoc = 0;
 uint8_t pinkWidth = 20;
 uint8_t tealWidth = 40;
-void NeonRacers(uint8_t speed, uint8_t racerNumber) {
+void NeonRacers(uint8_t speed, uint8_t racerNumber, int8_t dir) {
   // Shift effect
-  pinkLoc += speed*2;  
-  tealLoc += speed;
+  pinkLoc += speed * 2 * dir;  
+  tealLoc += speed * dir;
+
   //Reset positions
   if (pinkLoc>=strandLength) {
     pinkLoc -= strandLength;
+  } else if (pinkLoc<0) {
+    pinkLoc += strandLength;
   }
   if (tealLoc>=strandLength) {
     tealLoc -= strandLength;
+  } else if (tealLoc<0) {
+    tealLoc += strandLength;
   }
 
   // Add Color
@@ -385,7 +391,7 @@ void RGBBouncers(uint8_t speed, uint8_t racerNumber) {
   rgbOverlay(blueLoc, blueLoc+blueWidth, 0, 0, 255);
 }
 
-uint8_t warpSpeed = 10;
+uint8_t warpSpeed = 5;
 uint16_t warpLoc = 0;
 void Countdown() {
   // Shift band
@@ -394,7 +400,7 @@ void Countdown() {
   if (warpLoc>=strandLength) {
     warpLoc -= strandLength;
     if (warpSpeed<30) {
-      warpSpeed += 10;
+      warpSpeed += 5;
     }
     Serial.print("Warp speed: ");
     Serial.println(warpSpeed);

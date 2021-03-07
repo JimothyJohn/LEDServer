@@ -52,8 +52,12 @@ String speedParameter = {R"=====(
 
 String dirParameter = {R"=====(
 <form action="/direction" method="get">
-  <input type="checkbox" id="direction" name="direction" checked onchange='if(this.value != 0) { this.form.submit(); }'>
   <label for="direction">Direction</label><br>
+  <select name="direction" id="direction" onchange='if(this.value != 0) { this.form.submit(); }'>
+    <option value=0>Choose direction...</option>
+    <option value=1>Reverse</option>
+    <option value=2>Forward</option>
+  </select><br>
 </form>
 )====="
 };

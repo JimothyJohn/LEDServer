@@ -3,7 +3,6 @@
 // LED library and parameters
 #include "LEDEffects.h"
 #include <EffectParameters.h>
-
 // Use WifiManager for login and maintenance
 #include <WiFiManager.h>
 // Load async web library
@@ -22,7 +21,7 @@ void notFound(AsyncWebServerRequest *request) {
   request->send(404, "text/plain", "Not found");
 }
 
-uint8_t activeEffect = 10;
+uint8_t activeEffect = 7;
 String processor(const String& var) {
   if(var == "ACTIVE_EFFECT") {return effectString[activeEffect];}
   if(var == "PARAM_STRINGS") {return effectParameters[activeEffect];}
@@ -32,7 +31,7 @@ String processor(const String& var) {
 uint8_t masterSpeed = 1;
 uint8_t masterTempo = 1;
 uint8_t masterPalette = 1;
-int masterDir = 1;
+int8_t masterDir = 1;
 uint8_t numRacers = 1;
 // https://github.com/me-no-dev/ESPAsyncWebServer/blob/master/examples/simple_server/simple_server.ino
 void SetupServer() {
@@ -96,7 +95,7 @@ void SetupServer() {
       direction = request->getParam("direction")->value();
       Serial.print("Direction: ");
       Serial.println(direction);
-      masterDir = direction.toInt()*2-1;
+      masterDir = (direction.toInt()-1)*2-1;
     }
     request->send(SPIFFS, "/index.html", String(), false, processor);
   });
@@ -256,10 +255,10 @@ void handleEffect(uint8_t effect) {
       EVERY_N_MILLISECONDS(UPDATE_RATE) {RainbowChase(masterSpeed, masterDir, numBands);}
       break;
     case RACER_INDEX:
-      EVERY_N_MILLISECONDS(UPDATE_RATE) {NeonRacers(masterSpeed, numRacers);}
+      EVERY_N_MILLISECONDS(UPDATE_RATE) {NeonRacers(masterSpeed, numRacers, masterDir);}
       break;
     case BOUNCER_INDEX:
-      EVERY_N_MILLISECONDS(UPDATE_RATE) {NeonRacers(masterSpeed, numRacers);}
+      EVERY_N_MILLISECONDS(UPDATE_RATE) {NeonRacers(masterSpeed, numRacers, masterDir);}
       break;
     case COUNTDOWN_INDEX:
       EVERY_N_MILLISECONDS(UPDATE_RATE) {Countdown();}

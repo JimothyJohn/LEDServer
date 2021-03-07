@@ -74,15 +74,15 @@ void confetti();
 void sawtooth(uint8_t masterPalette, uint8_t BeatsPerMinute);
 
 // Rainbow chase effect
-extern uint16_t bandLoc;
+extern int16_t bandLoc;
 extern uint8_t numBands;
 extern int8_t rbDir;
-void RainbowChase(uint8_t speed, int dir, uint8_t bands);
+void RainbowChase(uint8_t speed, int8_t dir, uint8_t bands);
 
 // Racer params
 extern uint16_t pinkLoc, tealLoc;
 extern uint8_t pinkWidth, tealWidth;
-void NeonRacers(uint8_t speed, uint8_t racerNumber);
+void NeonRacers(uint8_t speed, uint8_t racerNumber, int8_t dir);
 
 // Bouncer params
 extern uint16_t redLoc, blueLoc, greenLoc;
