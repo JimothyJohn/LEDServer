@@ -4,7 +4,7 @@
 #include "LEDEffects.h"
 #include <EffectParameters.h>
 // Use WifiManager for login and maintenance
-#include <WiFiManager.h>
+#include <ESP_WiFiManager.h>
 // Load async web library
 #include <AsyncTCP.h>
 #include <ESPAsyncWebServer.h>
@@ -31,7 +31,7 @@ String processor(const String& var) {
 uint8_t masterSpeed = 1;
 uint8_t masterTempo = 1;
 uint8_t masterPalette = 1;
-int8_t masterDir = 1;
+int8_t masterDir = -1;
 uint8_t numRacers = 1;
 // https://github.com/me-no-dev/ESPAsyncWebServer/blob/master/examples/simple_server/simple_server.ino
 void SetupServer() {
@@ -60,10 +60,8 @@ void SetupServer() {
         activeEffect = effect.toInt() - 1;
         clearLEDs();
       }
-      if(activeEffect==10) {
-        warpSpeed = 5;
-      }
     }
+    warpSpeed = 5;
     Serial.print("Running effect: ");
     Serial.println(effectString[activeEffect]);
     request->send(SPIFFS, "/index.html", String(), false, processor);
@@ -178,21 +176,19 @@ void SetupOTA() {
 }
 
 // Initialize Wi-Fi manager and connect to Wi-Fi
-// https://github.com/tzapu/WiFiManager/blob/master/examples/Basic/Basic.ino
+// https://github.com/khoih-prog/ESP_WiFiManager
 void SetupWiFi() {
   Serial.print('Configuring WiFi...');
-  WiFi.mode(WIFI_STA); // make sure your code sets wifi mode
-
-  WiFiManager wm;
-
-  bool res = wm.autoConnect("uServer"); // anonymous ap
-
-  if(!res) {
-      Serial.println("Failed to connect");
-      ESP.restart();
-  } 
+  Serial.print(F("\nStarting AutoConnect_ESP32_minimal on ")); Serial.println(ARDUINO_BOARD); 
+  Serial.println(ESP_WIFIMANAGER_VERSION);
+  ESP_WiFiManager wm("uServer");
+  wm.autoConnect("uServer");
+  if (WiFi.status() == WL_CONNECTED) {
+    Serial.print(F("Connected. Local IP: "));
+    Serial.println(WiFi.localIP());
+  }
   else {
-      Serial.println("Connected to WiFi!");
+    Serial.println(wm.getStatus(WiFi.status()));
   }
 }
 
@@ -261,7 +257,7 @@ void handleEffect(uint8_t effect) {
       EVERY_N_MILLISECONDS(UPDATE_RATE) {NeonRacers(masterSpeed, numRacers, masterDir);}
       break;
     case COUNTDOWN_INDEX:
-      EVERY_N_MILLISECONDS(UPDATE_RATE) {Countdown();}
+      EVERY_N_MILLISECONDS(UPDATE_RATE) {Countdown(masterDir);}
       break;
   }
   FastLED.show();

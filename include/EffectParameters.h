@@ -126,4 +126,4 @@ racerParameter,
 // 9 - Bouncers
 speedParameter,
 // 10 - Countdown
-""};
+dirParameter};

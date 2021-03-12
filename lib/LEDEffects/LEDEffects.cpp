@@ -393,17 +393,20 @@ void RGBBouncers(uint8_t speed, uint8_t racerNumber) {
 
 uint8_t warpSpeed = 5;
 uint16_t warpLoc = 0;
-void Countdown() {
+void Countdown(int8_t dir) {
   // Shift band
-  warpLoc += warpSpeed;
+  warpLoc += warpSpeed * dir;
   // Reset location if at end and speed up
   if (warpLoc>=strandLength) {
     warpLoc -= strandLength;
     if (warpSpeed<30) {
       warpSpeed += 5;
     }
-    Serial.print("Warp speed: ");
-    Serial.println(warpSpeed);
+  } else if (warpLoc<0) {
+    warpLoc += strandLength;
+    if (warpSpeed<30) {
+      warpSpeed += 5;
+    }
   }
 
   clearLEDs();

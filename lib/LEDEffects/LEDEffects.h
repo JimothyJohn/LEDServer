@@ -92,6 +92,6 @@ void RGBBouncers(uint8_t speed, uint8_t racerNumber);
 
 extern uint8_t warpSpeed;
 extern uint16_t warpLoc;
-void Countdown();
+void Countdown(int8_t dir);
 
 #endif
