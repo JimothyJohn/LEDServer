@@ -135,6 +135,7 @@ void rgbOverlay(uint16_t led_start, uint16_t led_end, int r_offset, int g_offset
 void lightStrand(uint8_t strand, uint8_t r, uint8_t g, uint8_t b) {
   // For every strand in the band
   for(uint16_t dot=0; dot<strandLength; dot++) {
+    dot = dot % strandLength; // Account for overflow
     dot = XY(dot,strand); // Apply to matrix transoform
     // Assign value to LEDs
     leds[dot][0] = r;
@@ -170,7 +171,7 @@ void plasma(uint8_t palette, uint16_t led_start, uint16_t led_end) {            
 // Lightning Strike Effect
 uint16_t lightSequence = 0;
 void lightning() {
-  uint8_t lightDelay = 6;
+  uint8_t lightDelay = 12;
   if (lightSequence>=0 && lightSequence<lightDelay*1) {
     for(uint8_t strand=0; strand<1; strand++) {
       lightStrand(strand, 255, 255, 255);
