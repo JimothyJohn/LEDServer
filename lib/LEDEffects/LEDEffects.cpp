@@ -201,7 +201,7 @@ void lightning() {
       uint8_t litStrand = rand() % 8;
       lightStrand(litStrand, 255, 255, 255);
     }
-  }
+  } else { lightSequence++; }
 }
 
 // Modified Pacifica code to segment effect
