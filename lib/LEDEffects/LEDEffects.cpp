@@ -13,7 +13,7 @@
 #define qsuba(x, b)  ((x>b)?x-b:0) // For Plasma Effect
 const uint16_t strandLength = 300;
 const uint8_t strandNumber = 8;
-const uint8_t UPDATE_RATE = 15;
+const uint8_t UPDATE_RATE = 60;
 
 CRGB leds[(strandLength * strandNumber)];
 
@@ -131,6 +131,18 @@ void rgbOverlay(uint16_t led_start, uint16_t led_end, int r_offset, int g_offset
   }
 }
 
+// Changes an RGB pixel on all strands
+void lightStrand(uint8_t strand, uint8_t r, uint8_t g, uint8_t b) {
+  // For every strand in the band
+  for(uint16_t dot=0; dot<strandLength; dot++) {
+    dot = XY(dot,strand); // Apply to matrix transoform
+    // Assign value to LEDs
+    leds[dot][0] = r;
+    leds[dot][1] = g;
+    leds[dot][2] = b;
+  }
+}
+
 // Turns off all LED's
 void clearLEDs() {
   for(int dot = 0; dot < strandLength; dot++) {
@@ -156,26 +168,40 @@ void plasma(uint8_t palette, uint16_t led_start, uint16_t led_end) {            
 }
 
 // Lightning Strike Effect
+uint16_t lightSequence = 0;
 void lightning() {
-  uint16_t dimmer = 1;
-  uint16_t ledstart = random8(strandNumber*strandLength);                               // Determine starting location of flash
-  uint16_t ledlen = random8(strandNumber*strandLength-ledstart);                        // Determine length of flash (not to go beyond strandLength-1)
-  
-  for (int flashCounter = 0; flashCounter < random8(3,8); flashCounter++) {
-    if(flashCounter == 0) dimmer = 5;                         // the brightness of the leader is scaled down by a factor of 5
-    else dimmer = random8(1,3);                               // return strokes are brighter than the leader
-    
-    fill_solid(leds+ledstart,ledlen,CHSV(255, 0, 255/dimmer));
-    FastLED.show();                       // Show a section of LED's
-    delay(random8(4,10));                                     // each flash only lasts 4-10 milliseconds
-    fill_solid(leds+ledstart,ledlen,CHSV(255,0,0));           // Clear the section of LED's
-    FastLED.show();
-    
-    if (flashCounter == 0) delay (150);                       // longer delay until next flash after the leader
-    
-    delay(50+random8(100));                                   // shorter delay between strokes  
-  }  
-  delay(random8(50)*100);                              // delay between strikes
+  uint8_t lightDelay = 6;
+  if (lightSequence>=0 && lightSequence<lightDelay*1) {
+    for(uint8_t strand=0; strand<1; strand++) {
+      lightStrand(strand, 255, 255, 255);
+      lightStrand(7-strand, 255, 255, 255);
+    }
+  }
+  if (lightSequence>=lightDelay*1 && lightSequence<lightDelay*2) {
+    for(uint8_t strand=0; strand<2; strand++) {
+      lightStrand(strand, 255, 255, 255);
+      lightStrand(7-strand, 255, 255, 255);
+    }
+  }
+  if (lightSequence>=lightDelay*2 && lightSequence<lightDelay*3) {
+    for(uint8_t strand=0; strand<3; strand++) {
+      lightStrand(strand, 255, 255, 255);
+      lightStrand(7-strand, 255, 255, 255);
+    }      
+  }
+  if (lightSequence>=lightDelay*3 && lightSequence<lightDelay*4) {
+    for(uint8_t strand=0; strand<4; strand++) {
+      lightStrand(strand, 255, 255, 255);
+      lightStrand(7-strand, 255, 255, 255);
+    }  
+  }
+  if (lightSequence>=lightDelay*4) {
+    if (lightSequence%lightDelay == 0) {
+      clearLEDs();
+      uint8_t litStrand = rand() % 8;
+      lightStrand(litStrand, 255, 255, 255);
+    }
+  }
 }
 
 // Modified Pacifica code to segment effect

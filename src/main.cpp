@@ -60,6 +60,9 @@ void SetupServer() {
         activeEffect = effect.toInt() - 1;
         clearLEDs();
       }
+      if (activeEffect==2) {
+        lightSequence = 0;
+      }
     }
     warpSpeed = 5;
     Serial.print("Running effect: ");
@@ -231,7 +234,7 @@ void handleEffect(uint8_t effect) {
       EVERY_N_MILLISECONDS(UPDATE_RATE) {plasma(masterPalette, 0, strandNumber*strandLength);}
       break;
     case LIGHTNING_INDEX:
-      lightning();
+      EVERY_N_MILLISECONDS(UPDATE_RATE) {lightning();}
       break;
     case PACIFICA_INDEX:
       EVERY_N_MILLISECONDS(UPDATE_RATE) {pacifica_loop(0, strandNumber*strandLength);}
