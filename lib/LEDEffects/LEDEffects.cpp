@@ -169,33 +169,33 @@ void plasma(uint8_t palette, uint16_t led_start, uint16_t led_end) {            
 }
 
 // Lightning Strike Effect
-void lightning(uint16_t lightSequence, uint8_t lightDelay) {
-  if (lightSequence>=0 && lightSequence<lightDelay*1) {
+void lightning(uint16_t sequencer, uint8_t delay) {
+  if (sequencer>=0 && sequencer<delay*1) {
     for(uint8_t strand=0; strand<1; strand++) {
       lightStrand(strand, 255, 255, 255);
       lightStrand(7-strand, 255, 255, 255);
     }
   }
-  if (lightSequence>=lightDelay*1 && lightSequence<lightDelay*2) {
+  if (sequencer>=delay*1 && sequencer<delay*2) {
     for(uint8_t strand=0; strand<2; strand++) {
       lightStrand(strand, 255, 255, 255);
       lightStrand(7-strand, 255, 255, 255);
     }
   }
-  if (lightSequence>=lightDelay*2 && lightSequence<lightDelay*3) {
+  if (sequencer>=delay*2 && sequencer<delay*3) {
     for(uint8_t strand=0; strand<3; strand++) {
       lightStrand(strand, 255, 255, 255);
       lightStrand(7-strand, 255, 255, 255);
     }      
   }
-  if (lightSequence>=lightDelay*3 && lightSequence<lightDelay*4) {
+  if (sequencer>=delay*3 && sequencer<delay*4) {
     for(uint8_t strand=0; strand<4; strand++) {
       lightStrand(strand, 255, 255, 255);
       lightStrand(7-strand, 255, 255, 255);
     }  
   }
-  if (lightSequence>=lightDelay*4) {
-    if (lightSequence%lightDelay == 0) {
+  if (sequencer>=delay*4) {
+    if (sequencer%delay == 0) {
       clearLEDs();
       uint8_t litStrand = rand() % 8;
       lightStrand(litStrand, 255, 255, 255);

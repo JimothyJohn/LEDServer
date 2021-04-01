@@ -43,7 +43,7 @@ void clearLEDs();
 void plasma(uint8_t palette, uint16_t led_start, uint16_t led_end);
 
 // Lightning Strike Effect
-void lightning(uint16_t lightSequence);
+void lightning(uint16_t sequencer, uint8_t delay);
 
 // Modified Pacifica code to segment effect
 // Add one layer of waves into the led array
