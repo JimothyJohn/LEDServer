@@ -169,9 +169,7 @@ void plasma(uint8_t palette, uint16_t led_start, uint16_t led_end) {            
 }
 
 // Lightning Strike Effect
-uint16_t lightSequence = 0;
-void lightning() {
-  uint8_t lightDelay = 12;
+void lightning(uint16_t lightSequence, uint8_t lightDelay) {
   if (lightSequence>=0 && lightSequence<lightDelay*1) {
     for(uint8_t strand=0; strand<1; strand++) {
       lightStrand(strand, 255, 255, 255);
@@ -202,7 +200,7 @@ void lightning() {
       uint8_t litStrand = rand() % 8;
       lightStrand(litStrand, 255, 255, 255);
     }
-  } else { lightSequence++; }
+  }
 }
 
 // Modified Pacifica code to segment effect
