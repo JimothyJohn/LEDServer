@@ -195,9 +195,11 @@ void lightning(uint16_t sequencer, uint8_t delay) {
     }  
   }
   if (sequencer>=delay*4) {
-    if (sequencer%delay == 0) {
+    if (sequencer%2 == 0) {
       clearLEDs();
       uint8_t litStrand = rand() % 8;
+      // Serial.print("Lit strand: ");
+      // Serial.println(litStrand);
       lightStrand(litStrand, 255, 255, 255);
     }
   }

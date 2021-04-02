@@ -33,8 +33,8 @@ uint8_t masterTempo = 1;
 uint8_t masterPalette = 1;
 int8_t masterDir = -1;
 uint8_t numRacers = 1;
-uint16_t lightSequence = 0;
-uint16_t lightDelay = 50;
+uint16_t lightSequence = 200;
+uint16_t lightDelay = 20;
 
 // https://github.com/me-no-dev/ESPAsyncWebServer/blob/master/examples/simple_server/simple_server.ino
 void SetupServer() {
@@ -239,9 +239,12 @@ void handleEffect(uint8_t effect) {
     case LIGHTNING_INDEX:
       EVERY_N_MILLISECONDS(UPDATE_RATE) {
         lightning(lightSequence, lightDelay);
-        if (lightSequence>=lightDelay*4) {
+        lightSequence += 1;
+        if (lightSequence>lightDelay*5) {
           lightSequence = lightDelay*4+1;
         }
+        // Serial.print("Light sequence #");
+        // Serial.println(lightSequence);
       }
       break;
     case PACIFICA_INDEX:
