@@ -13,7 +13,7 @@
 #define qsuba(x, b)  ((x>b)?x-b:0) // For Plasma Effect
 const uint16_t strandLength = 300;
 const uint8_t strandNumber = 8;
-const uint8_t UPDATE_RATE = 60;
+const uint8_t UPDATE_RATE = 15;
 
 CRGB leds[(strandLength * strandNumber)];
 
@@ -169,6 +169,7 @@ void plasma(uint8_t palette, uint16_t led_start, uint16_t led_end) {            
 
 // Lightning Strike Effect
 void lightning(uint16_t sequencer, uint8_t delay) {
+  // Light first and last strand
   if (sequencer>=0 && sequencer<delay*1) {
     for(uint8_t strand=0; strand<1; strand++) {
       lightStrand(strand, 255, 255, 255);
@@ -194,8 +195,8 @@ void lightning(uint16_t sequencer, uint8_t delay) {
     }  
   }
   if (sequencer>=delay*4) {
-    if (sequencer%2 == 0) {
-      clearLEDs();
+    // Change 2 to higher number to slow down lightning
+    if (sequencer%4 == 0) {
       uint8_t litStrand = rand() % 8;
       lightStrand(litStrand, 255, 255, 255);
     }

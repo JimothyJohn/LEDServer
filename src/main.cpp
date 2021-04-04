@@ -238,6 +238,7 @@ void handleEffect(uint8_t effect) {
       break;
     case LIGHTNING_INDEX:
       EVERY_N_MILLISECONDS(UPDATE_RATE) {
+        clearLEDs();
         lightning(lightSequence, lightDelay);
         lightSequence += 1;
         if (lightSequence>lightDelay*5) {
